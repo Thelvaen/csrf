@@ -1,3 +1,7 @@
+# Temporary Partial Fork
+
+this repo will be deleted once https://github.com/iris-contrib/middleware/pull/65 has been accepted or an other workaround has been provided.
+
 # CSRF
 
 CSRF is an Iris middleware that provides [cross-site request
