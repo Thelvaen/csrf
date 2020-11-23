@@ -32,7 +32,7 @@ func FailureReason(ctx iris.Context) error {
 // CSRF attacks. The primary use-case for this function is to turn off CSRF
 // checks for non-browser clients using authorization tokens against your API.
 func UnsafeSkipCheck(ctx iris.Context) {
-	contextSave(ctx, skipCheckKey, true)
+	ctx.Values().Set(skipCheckKey, true)
 }
 
 // TemplateField is a template helper for html/template that provides an <input> field

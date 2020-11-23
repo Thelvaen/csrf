@@ -3,6 +3,7 @@ package csrf
 import (
 	"encoding/base64"
 	"errors"
+	"fmt"
 	"net/http"
 	"net/url"
 
@@ -129,11 +130,14 @@ func (csrf *CSRF) Filter(ctx iris.Context) bool {
 	opts := csrf.opts
 
 	// Skip the check if directed to. This should always be a bool.
-	if val, err := contextGet(ctx, skipCheckKey); err == nil {
-		if skip, ok := val.(bool); ok {
-			if skip {
-				return true
-			}
+	val := ctx.Values().Get(skipCheckKey)
+	if val == nil {
+		envError(ctx, fmt.Errorf("no value exists in the context for key %q", skipCheckKey))
+	}
+
+	if skip, ok := val.(bool); ok {
+		if skip {
+			return true
 		}
 	}
 
@@ -161,9 +165,9 @@ func (csrf *CSRF) Filter(ctx iris.Context) bool {
 	}
 
 	// Save the masked token to the request context
-	contextSave(ctx, tokenKey, mask(realToken))
+	ctx.Values().Set(tokenKey, mask(realToken))
 	// Save the field name to the request context in order for TemplateField to work.
-	contextSave(ctx, formKey, opts.FieldName)
+	ctx.Values().Set(formKey, opts.FieldName)
 
 	// HTTP methods not defined as idempotent ("safe") under RFC7231 require
 	// inspection.
