@@ -1,4 +1,4 @@
-module github.com/Thelvaen/iris-csrf
+module github.com/Thelvaen/csrf
 
 go 1.15
 
