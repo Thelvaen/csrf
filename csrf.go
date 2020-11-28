@@ -6,6 +6,7 @@ import (
 	"fmt"
 	"net/http"
 	"net/url"
+	"strings"
 
 	"github.com/kataras/iris/v12"
 	"github.com/kataras/iris/v12/context"
@@ -187,7 +188,10 @@ func (csrf *CSRF) Filter(ctx iris.Context) bool {
 
 			fmt.Println(referer.Host)
 			fmt.Println(ctx.Host())
-			valid := referer.Host != ctx.Host()
+			valid := false
+			if strings.Compare(referer.Host, ctx.Host()) == 0 {
+				valid = true
+			}
 			fmt.Println(valid)
 			if !valid {
 				for _, trustedOrigin := range opts.TrustedOrigins {
