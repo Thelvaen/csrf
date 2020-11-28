@@ -185,6 +185,8 @@ func (csrf *CSRF) Filter(ctx iris.Context) bool {
 				return false
 			}
 
+			fmt.Println(referer.Host)
+			fmt.Println(ctx.Host())
 			valid := referer.Host != ctx.Host()
 			if !valid {
 				for _, trustedOrigin := range opts.TrustedOrigins {
